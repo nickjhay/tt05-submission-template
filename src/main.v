@@ -51,7 +51,7 @@ module tt_um_nickjhay_processor (
 	//			sys_out[i-1][j], sys_out[i][j], clk
 	//		);
 
-	uo_out <= sys_out[7];
+	assign uo_out <= sys_out[7];
 
 endmodule
 
@@ -65,8 +65,8 @@ module systolic_cell (
 	reg acc;
 
 	always @(posedge clk) begin
-		out <= acc;
-		acc <= in;
+		assign out <= acc;
+		assign acc <= in;
 	end
 
 endmodule
