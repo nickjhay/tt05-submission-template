@@ -15,16 +15,20 @@ module tt_um_nickjhay_processor (
 
 	wire [7:0] sys_out[0:7];
 
-	for (int j=0; j<8; j++) 
-		systolic_cell(
-			ui_in[j], sys_out[0][j], clk
-		);
+	systolic_cell(
+		ui_in[0], sys_out[0][0], clk
+	);
 
-	for (int i=1; i<8; i++) 
-		for (int j=0; j<8; j++) 
-			systolic_cell(
-				sys_out[i-1][j], sys_out[i][j], clk
-			);
+	//for (int j=0; j<8; j++) 
+	//	systolic_cell(
+	//		ui_in[j], sys_out[0][j], clk
+	//	);
+
+	//for (int i=1; i<8; i++) 
+	//	for (int j=0; j<8; j++) 
+	//		systolic_cell(
+	//			sys_out[i-1][j], sys_out[i][j], clk
+	//		);
 
 	uo_out <= sys_out[7];
 
