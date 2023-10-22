@@ -86,7 +86,6 @@ module systolic_cell (
             acc <= 0;
         else
 			acc <= in;
-		end
 	end
 
 
