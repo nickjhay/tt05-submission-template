@@ -79,15 +79,16 @@ module systolic_cell (
 
 	reg acc;
 
+	assign out = acc;
+
 	always @(posedge clk) begin
-		if (reset) begin
-            second_counter <= 0;
-            digit <= 0;
-        end else begin
-		acc = in;
+		if (reset)
+            acc <= 0;
+        else
+			acc <= in;
+		end
 	end
 
-	assign out = acc;
 
 endmodule
 
