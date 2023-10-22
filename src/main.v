@@ -16,28 +16,7 @@ module tt_um_nickjhay_processor (
 	wire [7:0] sys_out[0:7];
 
 	systolic_cell s00 (
-		ui_in[0], sys_out[0][0], clk
-	);
-	systolic_cell s01 (
-		ui_in[1], sys_out[0][1], clk
-	);
-	systolic_cell s02 (
-		ui_in[2], sys_out[0][2], clk
-	);
-	systolic_cell s03 (
-		ui_in[3], sys_out[0][3], clk
-	);
-	systolic_cell s04 (
-		ui_in[4], sys_out[0][4], clk
-	);
-	systolic_cell s05 (
-		ui_in[5], sys_out[0][5], clk
-	);
-	systolic_cell s06 (
-		ui_in[6], sys_out[0][6], clk
-	);
-	systolic_cell s07 (
-		ui_in[7], sys_out[0][7], clk
+		.in(ui_in[0]), .out(sys_out[0][0]), .clk(clk)
 	);
 
 	//for (int j=0; j<8; j++) 
@@ -62,11 +41,11 @@ module systolic_cell (
 	input wire clk,
 	);
 
-	reg acc;
+	reg acc = 1'b0;
 
 	always @(posedge clk) begin
-		out <= acc;
-		acc <= in;
+		out = acc;
+		acc = in;
 	end
 
 endmodule
