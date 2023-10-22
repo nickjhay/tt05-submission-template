@@ -38,13 +38,14 @@ endmodule
 module systolic_cell (
 	input wire in,
 	output wire out,
-	input wire clk,
+	input wire clk
 	);
 
 	reg acc = 1'b0;
 
+	assign out = acc;
+
 	always @(posedge clk) begin
-		out = acc;
 		acc = in;
 	end
 
