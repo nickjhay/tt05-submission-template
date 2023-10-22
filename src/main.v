@@ -434,8 +434,7 @@ module tt_um_nickjhay_processor (
 		.in1(sys_out1[6][7]), .out1(sys_out1[7][7]), .in2(sys_out2[7][6]), .out2(sys_out2[7][7]), .clk(clk), .reset(reset)
 	);
 
-
-	assign uo_out = sys_out1 & sys_out2;
+	assign uo_out = sys_out1[7] & sys_out2[7];
 
 	// generate
 	// 	genvar j;
