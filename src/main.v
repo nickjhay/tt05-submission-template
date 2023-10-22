@@ -255,9 +255,9 @@ module tt_um_nickjhay_processor (
 	// );
 
 	generate
-		genvar i
+		genvar j
 
-		for (int j=0; j<8; j++) begin
+		for (j=0; j<8; j++) begin
 			systolic_cell cell(
 				.in(ui_in[j]), .out(sys_out[0][j]), .clk(clk), .reset(reset)
 			);
