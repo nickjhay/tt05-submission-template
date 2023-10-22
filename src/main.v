@@ -65,8 +65,8 @@ module systolic_cell (
 	reg acc;
 
 	always @(posedge clk) begin
-		assign out = acc;
-		assign acc = in;
+		out <= acc;
+		acc <= in;
 	end
 
 endmodule
