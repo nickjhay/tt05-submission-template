@@ -485,7 +485,7 @@ module systolic_cell (
 	output wire out1,
 	output wire out2,
 	input wire clk,
-	input wire reset,
+	input wire reset
 	);
 
 	reg acc;	
