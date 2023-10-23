@@ -18,6 +18,7 @@ module tt_um_nickjhay_processor (
 
 	// defaults
 	assign uio_oe = 8'b0;
+	assign uio_out = 8'b0;
 
 	// wire [7:0] sys_out[0:7];
 
