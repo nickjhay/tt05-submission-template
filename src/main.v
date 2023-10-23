@@ -36,9 +36,10 @@ module tt_um_nickjhay_processor (
 
 	always @(posedge clk)
 		if (reset) begin
-			sys_in1_next <= 1'b1;
 			sys_in1 <= 8'b0;
 			sys_in2 <= 8'b0;
+			sys_in1_buffer <= 8'b0;
+			sys_in1_next <= 1'b1;
 		end else if (sys_in1_next) begin
 			sys_in1 <= 8'b0;
 			sys_in2 <= 8'b0;
@@ -47,6 +48,7 @@ module tt_um_nickjhay_processor (
 		end else begin
 			sys_in1 <= sys_in1_buffer;
 			sys_in2 <= ui_in;
+			sys_in1_buffer <= 8'b0;
 			sys_in1_next <= 1'b1;
 		end
 
@@ -304,9 +306,11 @@ module systolic_cell (
 	reg acc;	
 
 	always @(posedge clk)
-		if (reset)
+		if (reset) begin
             acc <= 0;
-       	else if (readout) begin
+        	out1 <= 0;
+        	out1 <= 0;
+       	end else if (readout) begin
        		acc <= in1;
        		out1 <= acc;
        		out2 <= 1'b0;
