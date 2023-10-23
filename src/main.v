@@ -296,8 +296,8 @@ endmodule
 module systolic_cell (
 	input wire in1,
 	input wire in2,
-	output wire out1,
-	output wire out2,
+	output reg out1,  // shouldn't this be wire? doesn't work if it is, though
+	output reg out2,  // shouldn't this be wire? doesn't work if it is, though
 	input wire readout,
 	input wire clk,
 	input wire reset
