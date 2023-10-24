@@ -51,7 +51,7 @@ module tt_um_nickjhay_processor (
 		.in1(sys_in1),
 		.in2(sys_in2),
 		.out(sys_out)
-	)
+	);
 
 	assign uo_out = sys_out;
 
