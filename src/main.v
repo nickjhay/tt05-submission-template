@@ -61,33 +61,15 @@ module tt_um_nickjhay_processor (
 	assign sys_out2[0] = sys_in2;
 
 	genvar i;
+	genvar j;
 
 	generate
-		for (i = 0; i < 8; i = i + 1) begin
-			systolic_cell sx0 (
-				.in1(sys_out1[i][0]), .out1(sys_out1[i+1][0]), .in2(sys_out2[i][0]), .out2(sys_out2[i+1][0]), .readout(readout), .clk(clk), .reset(reset)
-			);
-			systolic_cell sx1 (
-				.in1(sys_out1[i][1]), .out1(sys_out1[i+1][1]), .in2(sys_out2[i][1]), .out2(sys_out2[i+1][1]), .readout(readout), .clk(clk), .reset(reset)
-			);
-			systolic_cell sx2 (
-				.in1(sys_out1[i][2]), .out1(sys_out1[i+1][2]), .in2(sys_out2[i][2]), .out2(sys_out2[i+1][2]), .readout(readout), .clk(clk), .reset(reset)
-			);
-			systolic_cell sx3 (
-				.in1(sys_out1[i][3]), .out1(sys_out1[i+1][3]), .in2(sys_out2[i][3]), .out2(sys_out2[i+1][3]), .readout(readout), .clk(clk), .reset(reset)
-			);
-			systolic_cell sx4 (
-				.in1(sys_out1[i][4]), .out1(sys_out1[i+1][4]), .in2(sys_out2[i][4]), .out2(sys_out2[i+1][4]), .readout(readout), .clk(clk), .reset(reset)
-			);
-			systolic_cell sx5 (
-				.in1(sys_out1[i][5]), .out1(sys_out1[i+1][5]), .in2(sys_out2[i][5]), .out2(sys_out2[i+1][5]), .readout(readout), .clk(clk), .reset(reset)
-			);
-			systolic_cell sx6 (
-				.in1(sys_out1[i][6]), .out1(sys_out1[i+1][6]), .in2(sys_out2[i][6]), .out2(sys_out2[i+1][6]), .readout(readout), .clk(clk), .reset(reset)
-			);
-			systolic_cell sx7 (
-				.in1(sys_out1[i][7]), .out1(sys_out1[i+1][7]), .in2(sys_out2[i][7]), .out2(sys_out2[i+1][7]), .readout(readout), .clk(clk), .reset(reset)
-			);
+		for (i = 0; i < 8; i = i + 1) begin : iloop
+			for (j = 0; j < 8; j = j + 1) begin : jloop
+				systolic_cell sxy (
+					.in1(sys_out1[i][j]), .out1(sys_out1[i+1][j]), .in2(sys_out2[i][j]), .out2(sys_out2[i+1][j]), .readout(readout), .clk(clk), .reset(reset)
+				);
+			end
 		end
 	endgenerate
 
