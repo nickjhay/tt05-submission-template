@@ -67,8 +67,9 @@ module tt_um_nickjhay_processor (
 		for (i = 0; i < 8; i = i + 1) begin : iloop
 			for (j = 0; j < 8; j = j + 1) begin : jloop
 				systolic_cell sxy (
-					.in1(sys_out1[i][j]), .out1(sys_out1[i+1][j]), .in2(sys_out2[i][j]), .out2(sys_out2[i+1][j]), .readout(readout), .clk(clk), .reset(reset)
+					.in1(sys_out1[i][j]), .out1(sys_out1[i+1][j]), .in2(sys_out2[j][i]), .out2(sys_out2[j+1][i]), .readout(readout), .clk(clk), .reset(reset)
 				);
+				// TODO: flip i, j for out1 vs out2? write out coords correctyl as [depth][idx]? or [x][y]?
 			end
 		end
 	endgenerate
