@@ -13,7 +13,7 @@ module tt_um_nickjhay_processor (
 
 	// Register file
 
-	wire reset = ! rst_n;
+	wire reset = !rst_n | !ena;
 
 
 	// defaults
