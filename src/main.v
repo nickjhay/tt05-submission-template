@@ -44,7 +44,7 @@ module tt_um_nickjhay_processor (
 		end
 
 	wire [7:0] sys_out;
-	systolic_array sa #(N=8) (
+	systolic_array #(.N(8)) sa (
 		.clk(clk),
 		.readout(readout),
 		.reset(reset),
