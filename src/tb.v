@@ -31,7 +31,7 @@ module tb ();
     wire sayhi = uio_in[1];
 
 
-    tt_um_nickjhay_coprocessor tt_um_nickjhay_coprocessor (
+    tt_um_nickjhay_processor tt_um_nickjhay_processor (
     // include power ports for the Gate Level test
     `ifdef GL_TEST
         .VPWR( 1'b1),
