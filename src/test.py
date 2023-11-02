@@ -19,7 +19,7 @@ import numpy as np
 #         [0, 0, 0, 0, 0, 1, 0, 0],
 #         [0, 0, 0, 0, 0, 0, 1, 0],
 #         [0, 0, 0, 0, 0, 0, 0, 1],
-#     ], dtype=np.int)
+#     ], dtype=np.int32)
 #     in_1 = ident
 #     in_2 = ident
 #     out = ident
@@ -33,7 +33,7 @@ import numpy as np
 #     #     [0, 1, 0, 0, 0, 0, 1, 1],
 #     #     [0, 1, 0, 0, 0, 0, 0, 1],
 #     #     [0, 1, 0, 0, 0, 0, 0, 1],
-#     # ], dtype=np.int)
+#     # ], dtype=np.int32)
 #     # in_2 = np.array([
 #     #     [0, 0, 1, 0, 0, 0, 1, 0],
 #     #     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -43,7 +43,7 @@ import numpy as np
 #     #     [0, 1, 0, 0, 0, 0, 1, 1],
 #     #     [0, 1, 0, 0, 0, 0, 0, 1],
 #     #     [0, 1, 0, 0, 0, 0, 0, 1],
-#     # ], dtype=np.int)
+#     # ], dtype=np.int32)
 
 #     # out = np.minimum(np.matmul(in_a, in_b), 1)
 #     # out = np.matmul(in_a, in_b) % 2  <-- for xor
@@ -53,8 +53,8 @@ import numpy as np
 #     #               V
 #     # in_1_feed -> out
 
-#     in_1_feed = np.zeros((8, 16), dtype=np.int)
-#     in_2_feed = np.zeros((16, 8), dtype=np.int)
+#     in_1_feed = np.zeros((8, 16), dtype=np.int32)
+#     in_2_feed = np.zeros((16, 8), dtype=np.int32)
 
 #     # multiplying rows of in_1 by cols of in_2
 #     # with deeper rows/cols delayed
@@ -146,26 +146,66 @@ async def test_mult2(dut):
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
+    # ident = np.array([
+    #     [1, 0, 0, 0, 0, 0, 0, 0],
+    #     [0, 1, 0, 0, 0, 0, 0, 0],
+    #     [0, 0, 1, 0, 0, 0, 0, 0],
+    #     [0, 0, 0, 1, 0, 0, 0, 0],
+    #     [0, 0, 0, 0, 1, 0, 0, 0],
+    #     [0, 0, 0, 0, 0, 1, 0, 0],
+    #     [0, 0, 0, 0, 0, 0, 1, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 1],
+    # ], dtype=np.int32)
+    # in_1 = ident
+    # in_2 = ident
+    # out = ident    
+
+    # in_1 = np.array([
+    #     [0, 0, 1, 0, 0, 0, 1, 0],
+    #     [0, 0, 1, 0, 0, 0, 1, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 0],
+    #     [0, 1, 0, 0, 0, 0, 1, 1],
+    #     [0, 1, 0, 0, 0, 0, 1, 1],
+    #     [0, 1, 0, 0, 0, 0, 0, 1],
+    #     [0, 1, 0, 0, 0, 0, 0, 1],
+    # ], dtype=np.int32)
+    # in_2 = np.array([
+    #     [0, 0, 1, 0, 0, 0, 1, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 0],
+    #     [0, 0, 1, 0, 0, 0, 1, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 0],
+    #     [0, 1, 0, 0, 0, 0, 1, 1],
+    #     [0, 1, 0, 0, 0, 0, 1, 1],
+    #     [0, 1, 0, 0, 0, 0, 0, 1],
+    #     [0, 1, 0, 0, 0, 0, 0, 1],
+    # ], dtype=np.int32)
+
     in_1 = np.array([
-        [0, 0, 1, 0, 0, 0, 1, 0],
-        [0, 0, 1, 0, 0, 0, 1, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 1],
-        [0, 1, 0, 0, 0, 0, 1, 1],
-        [0, 1, 0, 0, 0, 0, 0, 1],
-        [0, 1, 0, 0, 0, 0, 0, 1],
-    ], dtype=np.int)
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+    ], dtype=np.int32)
     in_2 = np.array([
-        [0, 0, 1, 0, 0, 0, 1, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 0, 0, 1, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 0, 0, 0, 1, 1],
-        [0, 1, 0, 0, 0, 0, 1, 1],
-        [0, 1, 0, 0, 0, 0, 0, 1],
-        [0, 1, 0, 0, 0, 0, 0, 1],
-    ], dtype=np.int)
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+    ], dtype=np.int32)
+
+    # 0 0 0 1
+    # 0 1 0 0
+    # 1 0 0 0
+    # 0 0 1 0  
 
     out = np.minimum(np.matmul(in_1, in_2), 1)
 
@@ -178,8 +218,8 @@ async def test_mult2(dut):
     #               V
     # in_1_feed -> out
 
-    in_1_feed = np.zeros((8, 16), dtype=np.int)
-    in_2_feed = np.zeros((16, 8), dtype=np.int)
+    in_1_feed = np.zeros((8, 16), dtype=np.int32)
+    in_2_feed = np.zeros((16, 8), dtype=np.int32)
 
     # multiplying rows of in_1 by cols of in_2
     # with deeper rows/cols delayed
@@ -187,7 +227,8 @@ async def test_mult2(dut):
         in_1_feed[i,i:i+8] = in_1[i]   # ith row of in_1
         in_2_feed[i:i+8,i] = in_2[:,i] # ith col of in_2
 
-
+    print(in_1_feed)
+    print(in_2_feed)
 
     # reset
     dut._log.info("reset")
@@ -221,10 +262,10 @@ async def test_mult2(dut):
         await ClockCycles(dut.clk, 1)
         dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} ui_in {dut.ui_in.value}\n")
 
-    await ClockCycles(dut.clk, 8)  # enough time to propagate?
+    await ClockCycles(dut.clk, 16)  # what's minimal time to propagate?
 
     # dut.readout.value = 1
-    dut.uio_in.value = 0x01
+    dut.uio_in.value = 0x01  # readout=1
 
     outs = []
     for i in range(16):
