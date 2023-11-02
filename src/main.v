@@ -15,55 +15,95 @@ module tt_um_nickjhay_processor (
 
 	wire reset = !rst_n | !ena;
 	wire readout = uio_in[0];
+	wire usexor = uio_in[1];
+	wire sayhi = uio_in[7];
 
 	// defaults
 	assign uio_oe = 8'b0;
 	assign uio_out = 8'b0;
 
-	reg [7:0] sys_in1;
+	wire [7:0] sys_in1;
+	wire [7:0] sys_in2;
 	reg [7:0] sys_in1_buffer;
-	reg [7:0] sys_in2;
 	reg sys_in1_next;
 
-	always @(posedge clk)
-		if (reset) begin
-			sys_in1 <= 8'b0;
-			sys_in2 <= 8'b0;
+	assign sys_in1 = (!reset && !readout && !sys_in1_next) ? sys_in1_buffer : 8'b0;
+	assign sys_in2 = (!reset && !readout && !sys_in1_next) ? ui_in : 8'b0;
+
+	always @(posedge clk) begin
+		if (reset || readout) begin
 			sys_in1_buffer <= 8'b0;
 			sys_in1_next <= 1'b1;
 		end else if (sys_in1_next) begin
-			sys_in1 <= 8'b0;
-			sys_in2 <= 8'b0;
 			sys_in1_buffer <= ui_in;
 			sys_in1_next <= 1'b0;
 		end else begin
-			sys_in1 <= sys_in1_buffer;
-			sys_in2 <= ui_in;
 			sys_in1_buffer <= 8'b0;
 			sys_in1_next <= 1'b1;
 		end
 
-	wire [7:0] sys_out;
-	systolic_array #(.N(8)) sa (
+		$display("main reset %b readout %b sys_in1 %b sys_in1_buffer %b sys_in2 %b sys_in1_next %b", reset, readout, sys_in1, sys_in1_buffer, sys_in2, sys_in1_next);		
+	end
+
+	// parameter N = 2;
+	// parameter N = 4;
+	parameter N = 8;
+
+	// wire [7:0] sys_out;
+	wire [N-1:0] sys_out;
+	systolic_array #(.N(N)) sa (
 		.clk(clk),
 		.readout(readout),
 		.reset(reset),
-		.in1(sys_in1),
-		.in2(sys_in2),
-		.out(sys_out)
+		.in1(sys_in1[N-1:0]),
+		.in2(sys_in2[N-1:0]),
+		.out(sys_out),
+		.usexor(usexor)
 	);
 
-	assign uo_out = sys_out;
+	wire [7:0] hi_out;
+	reg [3:0] hi_idx;
+
+	// TODO: better way here?
+	reg [7:0] hi_msg [0:15];
+	assign hi_msg[0]  = 0;
+	assign hi_msg[1]  = 0;
+	assign hi_msg[2]  = 0;	
+	assign hi_msg[3]  = "I";
+	assign hi_msg[4]  = " ";
+	assign hi_msg[5]  = "a";
+	assign hi_msg[6]  = "m";
+	assign hi_msg[7]  = " ";
+	assign hi_msg[8]  = "P";
+	assign hi_msg[9]  = "r";
+	assign hi_msg[10]  = "o";
+	assign hi_msg[11]  = "b";
+	assign hi_msg[12]  = "o";
+	assign hi_msg[13]  = "t";
+	assign hi_msg[14]  = "!";
+	assign hi_msg[15]  = 0;
+
+	always @(posedge clk)
+		if (sayhi) begin
+			hi_idx <= (hi_idx + 1) % 16;
+		end else begin
+			hi_idx <= 0;
+		end
+
+	assign hi_out = hi_msg[hi_idx];	
+
+	assign uo_out = sayhi ? hi_out : sys_out;
+	// assign uo_out = sys_out;
 
 endmodule
 
 
 module systolic_array #(parameter N = 8)
 (
-	input clk, readout, reset,
+	input clk, readout, reset, usexor,
 	input [N-1:0] in1,
 	input [N-1:0] in2,
-	output [N-1:0] out,
+	output [N-1:0] out
 );
 	genvar i;
 	genvar j;
@@ -79,7 +119,7 @@ module systolic_array #(parameter N = 8)
 		for (i = 0; i < N; i++) begin : iloop
 			for (j = 0; j < N; j++) begin : jloop
 				systolic_cell sxy (
-					.in1(sys_out1[i][j]), .out1(sys_out1[i+1][j]), .in2(sys_out2[j][i]), .out2(sys_out2[j+1][i]), .readout(readout), .clk(clk), .reset(reset)
+					.in1(sys_out1[i][j]), .out1(sys_out1[i+1][j]), .in2(sys_out2[j][i]), .out2(sys_out2[j+1][i]), .readout(readout), .clk(clk), .reset(reset), .usexor(usexor)
 				);
 				// TODO: flip i, j for out1 vs out2? write out coords correctly as or [x][y]?
 			end
@@ -94,29 +134,33 @@ endmodule
 module systolic_cell (
 	input wire in1,
 	input wire in2,
-	output reg out1,  // shouldn't this be wire? doesn't work if it is, though
-	output reg out2,  // shouldn't this be wire? doesn't work if it is, though
+	output wire out1,  // shouldn't this be wire? doesn't work if it is, though
+	output wire out2,  // shouldn't this be wire? doesn't work if it is, though
 	input wire readout,
 	input wire clk,
-	input wire reset
+	input wire reset,
+	input wire usexor
 	);
 
 	reg acc;	
 
-	always @(posedge clk)
+	assign out1 = readout ? acc : in1;
+	assign out2 = readout ? 1'b0 : in2;
+
+	always @(posedge clk) begin
+		// in1_and_in2 = in1 & in2
+
 		if (reset) begin
             acc <= 0;
-        	out1 <= 0;
-        	out1 <= 0;
        	end else if (readout) begin
        		acc <= in1;
-       		out1 <= acc;
-       		out2 <= 1'b0;
         end else begin
-			acc <= acc | (in1 & in2);
-			out1 <= in1;
-			out2 <= in2;
+			acc <= usexor ? (acc ^ (in1 & in2)) : (acc | (in1 & in2));
 		end
+
+		//$display("%m reset %b readout %b in1 %b in2 %b acc %b out1 %b out2 %b", reset, readout, in1, in2, acc, out1, out2);
+	end
+
 
 endmodule
 
