@@ -14,9 +14,9 @@ module tt_um_nickjhay_processor (
 	// Register file
 
 	wire reset = !rst_n | !ena;
-	wire readout = uio_in[0];
-	wire usexor = uio_in[1];
-	wire sayhi = uio_in[7];
+	wire sayhi = uio_in[0];
+	wire readout = uio_in[1];
+	wire usexor = uio_in[2];
 
 	// defaults
 	assign uio_oe = 8'b0;

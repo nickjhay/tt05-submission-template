@@ -100,8 +100,7 @@ import numpy as np
 
 #     await ClockCycles(dut.clk, 8)  # enough time to propagate?
 
-#     # dut.readout.value = 1
-#     dut.uio_in.value = 0x01
+#     dut.uio_in.value = 0x02  # readout=1
 
 #     outs = []
 #     for i in range(16):
@@ -264,8 +263,7 @@ async def test_mult2(dut):
 
     await ClockCycles(dut.clk, 16)  # what's minimal time to propagate?
 
-    # dut.readout.value = 1
-    dut.uio_in.value = 0x01  # readout=1
+    dut.uio_in.value = 0x02  # readout=1
 
     outs = []
     for i in range(16):
@@ -319,7 +317,7 @@ async def test_sayhi(dut):
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
 
-    dut.uio_in.value = 0x80  # sayhi=1
+    dut.uio_in.value = 0x01  # sayhi=1
 
     for i in range(60):        
         await ClockCycles(dut.clk, 1)
