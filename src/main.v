@@ -1,4 +1,4 @@
-module tt_um_nickjhay_processor (
+module tt_um_nickjhay_coprocessor (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -8,10 +8,6 @@ module tt_um_nickjhay_processor (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 	);
-
-	// Bunch o state here
-
-	// Register file
 
 	wire reset = !rst_n | !ena;
 	wire sayhi = uio_in[0];
