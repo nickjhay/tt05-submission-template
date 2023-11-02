@@ -40,7 +40,7 @@ module tt_um_nickjhay_coprocessor (
 			sys_in1_next <= 1'b1;
 		end
 
-		$display("main reset %b readout %b sys_in1 %b sys_in1_buffer %b sys_in2 %b sys_in1_next %b sys_in_valid %b", reset, readout, sys_in1, sys_in1_buffer, sys_in2, sys_in1_next, sys_in_valid);		
+		//$display("main reset %b readout %b sys_in1 %b sys_in1_buffer %b sys_in2 %b sys_in1_next %b sys_in_valid %b", reset, readout, sys_in1, sys_in1_buffer, sys_in2, sys_in1_next, sys_in_valid);		
 	end
 
 	// parameter N = 2;
@@ -171,11 +171,4 @@ module systolic_cell (
 
 
 endmodule
-
-
-
-// ALU logic: 1, 2, 4, 8 bits for N (no negativity) with +, x with modulo, saturating, tropical
-
-// start w/ 8x8 1bit example
-// in/out just TSU
 

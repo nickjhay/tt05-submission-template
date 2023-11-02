@@ -58,7 +58,7 @@ documentation:
   bidirectional:
     - "sayhi: outputs greeting"
     - read out multiplied matrix
-    - use xor rather than and
+    - use xor rather than or
     - none
     - none
     - none
