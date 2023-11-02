@@ -64,39 +64,37 @@ module tt_um_nickjhay_processor (
 		.sys_in_valid(sys_in_valid)
 	);
 
-	wire [7:0] hi_out;
+	reg [7:0] hi_out;
 	reg [3:0] hi_idx;
 
-	// TODO: better way here?
-	reg [7:0] hi_msg [0:15];
-	assign hi_msg[0]  = 0;
-	assign hi_msg[1]  = 0;
-	assign hi_msg[2]  = 0;	
-	assign hi_msg[3]  = "I";
-	assign hi_msg[4]  = " ";
-	assign hi_msg[5]  = "a";
-	assign hi_msg[6]  = "m";
-	assign hi_msg[7]  = " ";
-	assign hi_msg[8]  = "P";
-	assign hi_msg[9]  = "r";
-	assign hi_msg[10]  = "o";
-	assign hi_msg[11]  = "b";
-	assign hi_msg[12]  = "o";
-	assign hi_msg[13]  = "t";
-	assign hi_msg[14]  = "!";
-	assign hi_msg[15]  = 0;
+	always @*
+		case(hi_idx)
+			4'b0000 : hi_out = 0;
+			4'b0001 : hi_out = 0;
+			4'b0010 : hi_out = 0;
+			4'b0011 : hi_out = "I";
+			4'b0100 : hi_out = " ";
+			4'b0101 : hi_out = "a";
+			4'b0110 : hi_out = "m";
+			4'b0111 : hi_out = " ";
+			4'b1000 : hi_out = "P";
+			4'b1001 : hi_out = "r";
+			4'b1010 : hi_out = "o";
+			4'b1011 : hi_out = "b";
+			4'b1100 : hi_out = "o";
+			4'b1101 : hi_out = "t";
+			4'b1110 : hi_out = "!";
+			4'b1111 : hi_out = 0;
+		endcase	
 
 	always @(posedge clk)
 		if (sayhi) begin
-			hi_idx <= (hi_idx + 1) % 16;
+			hi_idx <= (hi_idx + 1'b1) % 16;  // or [0:3] ??
 		end else begin
 			hi_idx <= 0;
 		end
 
-	assign hi_out = hi_msg[hi_idx];	
-
 	assign uo_out = sayhi ? hi_out : sys_out;
-	// assign uo_out = sys_out;
 
 endmodule
 

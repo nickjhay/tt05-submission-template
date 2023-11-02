@@ -301,29 +301,28 @@ async def test_mult2(dut):
     #     dut._log.info("check segment {}".format(i))
     #     await ClockCycles(dut.clk, max_count)
     #     assert int(dut.segments.value) == segments[i % 10]
-# SAYHI = "\x00\x00\x00I am Probot!\x00"
 
-# @cocotb.test()
-# async def test_sayhi(dut):
-#     dut._log.info("start")
-#     clock = Clock(dut.clk, 10, units="us")
-#     cocotb.start_soon(clock.start())
+SAYHI = "\x00\x00\x00I am Probot!\x00"
 
-#     # reset
-#     dut._log.info("reset")
-#     dut.ena.value = 1
-#     dut.rst_n.value = 0
-#     dut.uio_in.value = 0x00
+@cocotb.test()
+async def test_sayhi(dut):
+    dut._log.info("start")
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
+
+    # reset
+    dut._log.info("reset")
+    dut.ena.value = 1
+    dut.rst_n.value = 0
+    dut.uio_in.value = 0x00
     
-#     await ClockCycles(dut.clk, 10)
-#     dut.rst_n.value = 1
+    await ClockCycles(dut.clk, 10)
+    dut.rst_n.value = 1
 
-#     dut.uio_in.value = 0x80  # sayhi=1
+    dut.uio_in.value = 0x80  # sayhi=1
 
-#     for i in range(60):        
-#         await ClockCycles(dut.clk, 1)
-#         dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value}\n")
-
-#         assert dut.uo_out.value.integer == ord(SAYHI[i%16])
-
+    for i in range(60):        
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value}\n")
+        assert dut.uo_out.value.integer == ord(SAYHI[i%16])
 
