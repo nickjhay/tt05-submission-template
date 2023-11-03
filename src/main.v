@@ -40,7 +40,7 @@ module tt_um_nickjhay_processor (
 			sys_in1_next <= 1'b1;
 		end
 
-		//$display("main reset %b readout %b sys_in1 %b sys_in1_buffer %b sys_in2 %b sys_in1_next %b sys_in_valid %b", reset, readout, sys_in1, sys_in1_buffer, sys_in2, sys_in1_next, sys_in_valid);		
+		// $display("main reset %b readout %b sys_in1 %b sys_in1_buffer %b sys_in2 %b sys_in1_next %b sys_in_valid %b usexor %b", reset, readout, sys_in1, sys_in1_buffer, sys_in2, sys_in1_next, sys_in_valid, usexor);		
 	end
 
 	// parameter N = 2;
@@ -166,7 +166,7 @@ module systolic_cell (
             out2 <= out2;
         end
 
-		//$display("%m reset %b readout %b in1 %b in2 %b acc %b out1 %b out2 %b", reset, readout, in1, in2, acc, out1, out2);
+		// $display("%m reset %b usexor %b readout %b in1 %b in2 %b acc %b out1 %b out2 %b", reset, readout, usexor, in1, in2, acc, out1, out2);
 	end
 
 

@@ -10,10 +10,11 @@ async def do_test_mult(in_1, in_2, dut, usexor=False):
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
+    raw_correct_out = np.matmul(in_1, in_2)
     if usexor:
-        correct_out = np.matmul(in_1, in_2) % 2
+        correct_out = raw_correct_out % 2
     else:
-        correct_out = np.minimum(np.matmul(in_1, in_2), 1)
+        correct_out = np.minimum(raw_correct_out, 1)
 
     #            in_2_feed
     #               |
@@ -49,7 +50,12 @@ async def do_test_mult(in_1, in_2, dut, usexor=False):
     dut.ena.value = 1
     dut.rst_n.value = 0
     #dut.readout.value = 0
-    dut.uio_in.value = 0x00
+    
+    if usexor:
+        dut.uio_in.value = 0x04  # usexor=1
+    else:
+        dut.uio_in.value = 0x00  # usexor=0
+
     
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
@@ -82,6 +88,13 @@ async def do_test_mult(in_1, in_2, dut, usexor=False):
             assert dut.uo_out.value == 0
 
     out_matrix = np.array(out_columns[1:9], dtype=np.int32)[::-1,::-1].T
+
+    print("out_matrix")
+    print(out_matrix)
+    print("correct_out")
+    print(correct_out)
+    print("raw_correct_out")
+    print(raw_correct_out)
 
     np.testing.assert_equal(out_matrix, correct_out)
 
