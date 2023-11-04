@@ -33,7 +33,9 @@ for idx, ch in enumerate(text):
 
 
 
+# initial 
 strings = [
+	"\x00",
 	"Do you enter the tavern?\x00",
 	"It's your party, you win!\x00",
 	"A single tear falls from your face. You walk away and whisper: ",
@@ -48,6 +50,7 @@ k = 7
 var = 'text_out'
 text = "".join(strings)
 
+print(f"Total length: {len(text)}")
 assert len(text) <= 2**k
 
 for idx, ch in enumerate(text):
@@ -55,5 +58,5 @@ for idx, ch in enumerate(text):
 
 print("====")
 for ch in text:
-	print(f"{ord(ch):08b}")
+	print(f"{ord(ch):07b}")
 

@@ -27,9 +27,12 @@ module tb ();
     wire [7:0] uio_out;
     wire [7:0] uio_oe;
 
-    wire readout = uio_in[0];
-    wire sayhi = uio_in[1];
+    wire sayhi = uio_in[0];
+    wire readout = uio_in[1];
     wire usexor = uio_in[2];
+    wire start_adventure = uio_in[3];
+    wire answer_yes = uio_in[4];
+    wire answer_no = uio_in[5];
 
     tt_um_nickjhay_processor tt_um_nickjhay_processor (
     // include power ports for the Gate Level test

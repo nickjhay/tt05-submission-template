@@ -13,6 +13,9 @@ module tt_um_nickjhay_processor (
 	wire sayhi = uio_in[0];
 	wire readout = uio_in[1];
 	wire usexor = uio_in[2];
+    wire start_adventure = uio_in[3];
+    wire answer_no = uio_in[4];
+    wire answer_yes = uio_in[5];
 
 	// defaults
 	assign uio_oe = 8'b0;
@@ -60,25 +63,180 @@ module tt_um_nickjhay_processor (
 		.sys_in_valid(sys_in_valid)
 	);
 
-	reg [7:0] text_out;
 	reg [6:0] text_idx;
+	reg [7:0] text_out;
 
-	reg [6:0] text_data [6:0];
+    always @*
+    	case (text_idx)
+	 	    7'b0000000 : text_out = 0;
+			7'b0000001 : text_out = 68;
+			7'b0000010 : text_out = 111;
+			7'b0000011 : text_out = 32;
+			7'b0000100 : text_out = 121;
+			7'b0000101 : text_out = 111;
+			7'b0000110 : text_out = 117;
+			7'b0000111 : text_out = 32;
+			7'b0001000 : text_out = 101;
+			7'b0001001 : text_out = 110;
+			7'b0001010 : text_out = 116;
+			7'b0001011 : text_out = 101;
+			7'b0001100 : text_out = 114;
+			7'b0001101 : text_out = 32;
+			7'b0001110 : text_out = 116;
+			7'b0001111 : text_out = 104;
+			7'b0010000 : text_out = 101;
+			7'b0010001 : text_out = 32;
+			7'b0010010 : text_out = 116;
+			7'b0010011 : text_out = 97;
+			7'b0010100 : text_out = 118;
+			7'b0010101 : text_out = 101;
+			7'b0010110 : text_out = 114;
+			7'b0010111 : text_out = 110;
+			7'b0011000 : text_out = 63;
+			7'b0011001 : text_out = 0;
+			7'b0011010 : text_out = 73;
+			7'b0011011 : text_out = 116;
+			7'b0011100 : text_out = 39;
+			7'b0011101 : text_out = 115;
+			7'b0011110 : text_out = 32;
+			7'b0011111 : text_out = 121;
+			7'b0100000 : text_out = 111;
+			7'b0100001 : text_out = 117;
+			7'b0100010 : text_out = 114;
+			7'b0100011 : text_out = 32;
+			7'b0100100 : text_out = 112;
+			7'b0100101 : text_out = 97;
+			7'b0100110 : text_out = 114;
+			7'b0100111 : text_out = 116;
+			7'b0101000 : text_out = 121;
+			7'b0101001 : text_out = 44;
+			7'b0101010 : text_out = 32;
+			7'b0101011 : text_out = 121;
+			7'b0101100 : text_out = 111;
+			7'b0101101 : text_out = 117;
+			7'b0101110 : text_out = 32;
+			7'b0101111 : text_out = 119;
+			7'b0110000 : text_out = 105;
+			7'b0110001 : text_out = 110;
+			7'b0110010 : text_out = 33;
+			7'b0110011 : text_out = 0;
+			7'b0110100 : text_out = 65;
+			7'b0110101 : text_out = 32;
+			7'b0110110 : text_out = 115;
+			7'b0110111 : text_out = 105;
+			7'b0111000 : text_out = 110;
+			7'b0111001 : text_out = 103;
+			7'b0111010 : text_out = 108;
+			7'b0111011 : text_out = 101;
+			7'b0111100 : text_out = 32;
+			7'b0111101 : text_out = 116;
+			7'b0111110 : text_out = 101;
+			7'b0111111 : text_out = 97;
+			7'b1000000 : text_out = 114;
+			7'b1000001 : text_out = 32;
+			7'b1000010 : text_out = 102;
+			7'b1000011 : text_out = 97;
+			7'b1000100 : text_out = 108;
+			7'b1000101 : text_out = 108;
+			7'b1000110 : text_out = 115;
+			7'b1000111 : text_out = 32;
+			7'b1001000 : text_out = 102;
+			7'b1001001 : text_out = 114;
+			7'b1001010 : text_out = 111;
+			7'b1001011 : text_out = 109;
+			7'b1001100 : text_out = 32;
+			7'b1001101 : text_out = 121;
+			7'b1001110 : text_out = 111;
+			7'b1001111 : text_out = 117;
+			7'b1010000 : text_out = 114;
+			7'b1010001 : text_out = 32;
+			7'b1010010 : text_out = 102;
+			7'b1010011 : text_out = 97;
+			7'b1010100 : text_out = 99;
+			7'b1010101 : text_out = 101;
+			7'b1010110 : text_out = 46;
+			7'b1010111 : text_out = 32;
+			7'b1011000 : text_out = 89;
+			7'b1011001 : text_out = 111;
+			7'b1011010 : text_out = 117;
+			7'b1011011 : text_out = 32;
+			7'b1011100 : text_out = 119;
+			7'b1011101 : text_out = 97;
+			7'b1011110 : text_out = 108;
+			7'b1011111 : text_out = 107;
+			7'b1100000 : text_out = 32;
+			7'b1100001 : text_out = 97;
+			7'b1100010 : text_out = 119;
+			7'b1100011 : text_out = 97;
+			7'b1100100 : text_out = 121;
+			7'b1100101 : text_out = 32;
+			7'b1100110 : text_out = 97;
+			7'b1100111 : text_out = 110;
+			7'b1101000 : text_out = 100;
+			7'b1101001 : text_out = 32;
+			7'b1101010 : text_out = 119;
+			7'b1101011 : text_out = 104;
+			7'b1101100 : text_out = 105;
+			7'b1101101 : text_out = 115;
+			7'b1101110 : text_out = 112;
+			7'b1101111 : text_out = 101;
+			7'b1110000 : text_out = 114;
+			7'b1110001 : text_out = 58;
+			7'b1110010 : text_out = 32;
+			7'b1110011 : text_out = 73;
+			7'b1110100 : text_out = 32;
+			7'b1110101 : text_out = 97;
+			7'b1110110 : text_out = 109;
+			7'b1110111 : text_out = 32;
+			7'b1111000 : text_out = 80;
+			7'b1111001 : text_out = 114;
+			7'b1111010 : text_out = 111;
+			7'b1111011 : text_out = 98;
+			7'b1111100 : text_out = 111;
+			7'b1111101 : text_out = 116;
+			7'b1111110 : text_out = 46;
+			7'b1111111 : text_out = 0;
+		endcase
 
-    initial begin
-        /* verilator lint_off WIDTH */
-        $readmemb("strings.data", text_data);
-        /* verilator lint_on WIDTH */
-    end
 
-	always @(posedge clk)
-		if (sayhi) begin
-			text_idx <= (text_idx + 1'b1) % 128;  // or [0:7] ??
+	reg adventure_running;
+
+	always @(posedge clk) begin
+//		$display("adventure_running %b", adventure_running);
+		if (reset) begin
+//			$display("T reset");
+			text_idx <= 0;
+			adventure_running <= 0;
+		end else if (sayhi) begin
+//			$display("T sayhi");
+			text_idx <= 115;
+			adventure_running <= 0;
+		end else if (start_adventure) begin
+//			$display("T start_adventure");		
+			text_idx <= 1;
+			adventure_running <= 1;
+		end else if (answer_yes) begin
+//			$display("T answer_yes");		
+			text_idx <= adventure_running ? 26 : text_idx;
+			adventure_running <= 0;
+		end else if (answer_no) begin
+//			$display("T answer_no");		
+			text_idx <= adventure_running ? 52 : text_idx;
+			adventure_running <= 0;
+		end else if (text_idx > 0) begin
+//			$display("T advance text %b", text_idx);
+			if (text_out == 0)
+				text_idx <= text_idx;
+			else
+				text_idx <= (text_idx + 1'b1);  // implicit wrap?
 		end else begin
+//			$display("T else");
+			adventure_running <= 0;
 			text_idx <= 0;
 		end
+	end
 
-	assign uo_out = sayhi ? {1'b0,text_data[text_idx]} : sys_out;
+	assign uo_out = text_idx > 0 ? text_out : sys_out;
 
 endmodule
 

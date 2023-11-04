@@ -214,10 +214,10 @@ async def test_mult_xor(dut):
     await do_test_mult(in_1, in_2, dut, usexor=True)
 
 
-SAYHI = "\x00\x00\x00I am Probot!\x00"
-
 @cocotb.test()
 async def test_sayhi(dut):
+    SAYHI = "I am Probot.\x00"
+    
     dut._log.info("start")
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
@@ -232,9 +232,136 @@ async def test_sayhi(dut):
     dut.rst_n.value = 1
 
     dut.uio_in.value = 0x01  # sayhi=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # sayhi=0
 
     for i in range(60):        
         await ClockCycles(dut.clk, 1)
-        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value}")
-        assert dut.uo_out.value.integer == ord(SAYHI[i%16])
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == ord(SAYHI[min(i, len(SAYHI)-1)])
 
+
+    # "Do you enter the tavern?\x00",
+    # "It's your party, you win!\x00",
+    # "A single tear falls from your face. You walk away and whisper: ",
+    # "I am Probot.\x00",
+
+    # wire start_adventure = uio_in[3];
+    # wire answer_no = uio_in[4];
+    # wire answer_yes = uio_in[5];
+
+START_ADVENTURE = "Do you enter the tavern?\x00"
+ANSWER_YES = "It's your party, you win!\x00"
+ANSWER_NO = "A single tear falls from your face. You walk away and whisper: I am Probot.\x00"
+
+@cocotb.test()
+async def test_adventure_no(dut):
+    dut._log.info("start")
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
+
+    # reset
+    dut._log.info("reset")
+    dut.ena.value = 1
+    dut.rst_n.value = 0
+    dut.uio_in.value = 0x00
+    
+    await ClockCycles(dut.clk, 10)
+    dut.rst_n.value = 1
+
+    dut._log.info("answer_no")
+    dut.uio_in.value = 0x10  # answer_no=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # answer_no=0
+
+    for i in range(20):        
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == 0    
+
+    dut._log.info("start_adventure")
+    dut.uio_in.value = 0x08  # start_adventure=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # start_adventure=0
+
+    for i in range(30):        
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == ord(START_ADVENTURE[min(i, len(START_ADVENTURE)-1)])
+
+    dut._log.info("answer_no")
+    dut.uio_in.value = 0x10  # answer_no=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # answer_no=0
+
+    for i in range(100):
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == ord(ANSWER_NO[min(i, len(ANSWER_NO)-1)])
+
+    dut._log.info("answer_no")
+    dut.uio_in.value = 0x10  # answer_no=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # answer_no=0
+
+    for i in range(20):        
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == 0
+
+
+
+@cocotb.test()
+async def test_adventure_yes(dut):
+    dut._log.info("start")
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
+
+    # reset
+    dut._log.info("reset")
+    dut.ena.value = 1
+    dut.rst_n.value = 0
+    dut.uio_in.value = 0x00
+    
+    await ClockCycles(dut.clk, 10)
+    dut.rst_n.value = 1
+
+    dut._log.info("answer_yes")
+    dut.uio_in.value = 0x20  # answer_yes=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # answer_yes=0
+
+    for i in range(20):        
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == 0    
+
+    dut._log.info("start_adventure")
+    dut.uio_in.value = 0x08  # start_adventure=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # start_adventure=0
+
+    for i in range(30):        
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == ord(START_ADVENTURE[min(i, len(START_ADVENTURE)-1)])
+
+    dut._log.info("answer_yes")
+    dut.uio_in.value = 0x20  # answer_yes=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # answer_yes=0
+
+    for i in range(100):
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == ord(ANSWER_YES[min(i, len(ANSWER_YES)-1)])
+
+    dut._log.info("answer_yes")
+    dut.uio_in.value = 0x20  # answer_yes=1
+    await ClockCycles(dut.clk, 2)
+    dut.uio_in.value = 0x00  # answer_yes=0
+
+    for i in range(20):        
+        await ClockCycles(dut.clk, 1)
+        dut._log.info(f"[{i}] value of uo_out {dut.uo_out.value} {chr(dut.uo_out.value.integer)}")
+        assert dut.uo_out.value.integer == 0
